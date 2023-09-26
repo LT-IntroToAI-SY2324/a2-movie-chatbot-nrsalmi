@@ -21,35 +21,59 @@ def match(pattern: List[str], source: List[str]) -> List[str]:
     # keep checking as long as we haven't hit the end of either pattern or source while
     # pind is still a valid index OR sind is still a valid index (valid index means that
     # the index is != to the length of the list)
-    while "FILL IN CONDITION HERE":
+    while sind < len(source) or pind < len(pattern):
         # your job is to fill out the body of this loop
 
         # you should delete the following line
-        return ["Not done yet :)"]
-
+        
         # 1) if we reached the end of the pattern but not source
+        if pind == len(pattern) and sind < len(source):
+            return None
 
         # 2) if the current thing in the pattern is a %
         # WARNING: this condition contains the bulk of the code for the assignment
         # If you get stuck on this one, we encourage you to attempt the other conditions
         #   and come back to this one afterwards
-
+        elif pattern[pind] == "%":
+            if pind == (len(pattern)-1):
+                result.append(" ".join(source[sind:]))
+                return result
+            else:
+                product = " "
+                pind +=1
+                while pattern[pind] != source[sind]:
+                    product += source[sind] + " "
+                    sind+=1
+                    if sind >= len(source):
+                        return None
+                result.append(product.strip())       
         # 3) if we reached the end of the source but not the pattern
-
+        elif sind == len(source) and pind < len(pattern):
+            return None
         # 4) if the current thing in the pattern is an _
-
+        elif pattern[pind] == "_":
+            result.append(source[sind])
+            pind+=1
+            sind+=1
         # 5) if the current thing in the pattern is the same as the current thing in the
         # source
+        elif pattern[pind] == source[sind]:
+            pind += 1
+            sind += 1
 
         # 6) else : this will happen if none of the other conditions are met it
         # indicates the current thing it pattern doesn't match the current thing in
         # source
+        else:
+            return None
 
     return result
 
 
 if __name__ == "__main__":
+    print(match(["x", "y", "z"], ["x", "y", "z"]))
     assert match(["x", "y", "z"], ["x", "y", "z"]) == [], "test 1 failed"
+    print(match(["x", "z", "z"], ["x", "y", "z"]))
     assert match(["x", "z", "z"], ["x", "y", "z"]) == None, "test 2 failed"
     assert match(["x", "y"], ["x", "y", "z"]) == None, "test 3 failed"
     assert match(["x", "y", "z", "z"], ["x", "y", "z"]) == None, "test 4 failed"
@@ -72,4 +96,4 @@ if __name__ == "__main__":
     # written our match function
     assert match(["x", "%", "z"], ["x", "y", "z", "z", "z"]) == None, "test 15 failed"
 
-    print("All tests passed!")
+print("All tests passed!")
